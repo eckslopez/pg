@@ -1,4 +1,3 @@
-```markdown
 # Multi-Tenant PostgreSQL Isolation Demo
 
 This project demonstrates secure multi-tenant isolation in PostgreSQL using:
