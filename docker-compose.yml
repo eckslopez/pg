@@ -1,20 +1,16 @@
-version: "3.9"
-
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: pg-multitenant
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: supersecret   # superuser password (postgres user)
+      POSTGRES_PASSWORD: supersecret
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
-      # Data volume (named)
       - pgdata:/var/lib/postgresql/data
-      # Init scripts (run once on first startup)
       - ./init:/docker-entrypoint-initdb.d
 
 volumes:
