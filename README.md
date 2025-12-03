@@ -132,32 +132,31 @@ These documents serve as a reference implementation for building secure, complia
 Planned next steps include:
 
 1. Terraform Migration  
-   Convert the SQL-based tenant configuration into Terraform resources using:
+   Convert the database initialization logic (currently in SQL) into Terraform resources using the Terraform **PostgreSQL provider**, including:
    - `postgresql_database`
    - `postgresql_role`
    - `postgresql_schema`
    - `postgresql_grant`
    - `postgresql_default_privileges`
 
+   These resources will allow Terraform to connect directly to a PostgreSQL instance (initially your local Docker instance, later AWS RDS) and create tenant databases, roles, schemas, and hardened privileges in a fully declarative manner.
+
 2. AWS Deployment  
-   Introduce RDS or Aurora PostgreSQL infrastructure using Terraform.
-   Configure:
-   - Parameter groups (pgAudit, logging, settings)
-   - Security groups and networking
-   - KMS encryption
-   - Backup and snapshot policies
+   Introduce AWS infrastructure using Terraform’s `aws` provider:
+   - `aws_db_instance` or `aws_rds_cluster` for PostgreSQL
+   - Subnet group, security groups, parameter group (pgAudit, logging)
+   - KMS encryption and backup policies
+
+   The PostgreSQL provider will then target the RDS endpoint to apply the same tenant isolation model used in the local Docker environment.
 
 3. CI/CD Integration  
    Use GitLab CI/CD to:
-   - Run the full Docker test suite on each merge request
-   - Execute terraform plan/apply pipelines
-   - Add optional post-deploy verification tests against RDS
+   - Run the Docker-based isolation tests on each merge request
+   - Execute Terraform `plan` for review
+   - Execute Terraform `apply` on protected branches
+   - Optionally run a post-deploy verification test suite against RDS
 
-4. pgAudit Integration in Production  
-   Enable pgAudit via RDS parameter groups and surface logs to CloudWatch/SIEM.
-
-5. Tenant Onboarding Automation  
-   Drive new tenant creation entirely through Terraform modules and CI/CD workflows.
+4. pgAudit Integra
 
 -----------------------------------------------------------------------
 
