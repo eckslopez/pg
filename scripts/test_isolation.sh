@@ -90,6 +90,57 @@ run_test "Tenant A: can read its own app.sample_data" \
   psql -U tenant_a_app -d db_tenant_a \
   -c "SELECT * FROM app.sample_data;"
 
+# -----------------------------------------------------
+# Operational guardrail tests (Tenant A)
+# -----------------------------------------------------
+
+run_expect_fail "Tenant A: statement_timeout enforced (pg_sleep should be canceled)" \
+  psql -U tenant_a_app -d db_tenant_a -c "SELECT pg_sleep(10);"
+
+# Connection limit test:
+# This attempts to open multiple concurrent sessions that remain open briefly.
+# The per-role CONNECTION LIMIT must be set low enough that this will exceed it.
+#
+# Recommended for demo:
+ALTER ROLE tenant_a_app CONNECTION LIMIT 2;
+#
+# If you keep it at 10, raise the number of sessions below accordingly.
+
+section "Tenant A: connection limit enforced (one of these should fail if limit is low)"
+
+# Start 3 concurrent sessions that sleep for a bit. If CONNECTION LIMIT is 2, one should fail.
+set +e
+
+docker exec "$CONTAINER_NAME" \
+  psql -U tenant_a_app -d db_tenant_a -c "SELECT pg_sleep(8);" >/dev/null 2>&1 &
+p1=$!
+
+docker exec "$CONTAINER_NAME" \
+  psql -U tenant_a_app -d db_tenant_a -c "SELECT pg_sleep(8);" >/dev/null 2>&1 &
+p2=$!
+
+docker exec "$CONTAINER_NAME" \
+  psql -U tenant_a_app -d db_tenant_a -c "SELECT pg_sleep(8);" >/dev/null 2>&1 &
+p3=$!
+
+wait $p1; rc1=$?
+wait $p2; rc2=$?
+wait $p3; rc3=$?
+
+set -e 2>/dev/null || true
+
+# At least one should be non-zero if the limit is exceeded.
+if [ $rc1 -ne 0 ] || [ $rc2 -ne 0 ] || [ $rc3 -ne 0 ]; then
+  echo "[OK] Tenant A: connection limit appears enforced (at least one session failed)"
+else
+  echo "[FAIL] Tenant A: all concurrent sessions succeeded; connection limit may be too high or not applied"
+  FAILURES=$((FAILURES + 1))
+fi
+
+# -----------------------------------------------------
+# Tenant A negative isolation tests (continue)
+# -----------------------------------------------------
+
 run_expect_fail "Tenant A: cannot connect to db_tenant_b" \
   psql -U tenant_a_app -d db_tenant_b \
   -c "SELECT current_user, current_database();"

@@ -154,3 +154,19 @@ CREATE TABLE app.sample_data (
 );
 ALTER TABLE app.sample_data OWNER TO tenant_c_app;
 INSERT INTO app.sample_data (note) VALUES ('tenant C row 1');
+
+-- Operational guardrails (tune values per environment)
+ALTER ROLE tenant_a_app CONNECTION LIMIT 10;
+ALTER ROLE tenant_a_app SET statement_timeout = '3s';
+ALTER ROLE tenant_a_app SET lock_timeout = '2s';
+ALTER ROLE tenant_a_app SET idle_in_transaction_session_timeout = '10s';
+
+ALTER ROLE tenant_b_app CONNECTION LIMIT 10;
+ALTER ROLE tenant_b_app SET statement_timeout = '3s';
+ALTER ROLE tenant_b_app SET lock_timeout = '2s';
+ALTER ROLE tenant_b_app SET idle_in_transaction_session_timeout = '10s';
+
+ALTER ROLE tenant_c_app CONNECTION LIMIT 10;
+ALTER ROLE tenant_c_app SET statement_timeout = '3s';
+ALTER ROLE tenant_c_app SET lock_timeout = '2s';
+ALTER ROLE tenant_c_app SET idle_in_transaction_session_timeout = '10s';
