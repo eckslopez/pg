@@ -36,7 +36,7 @@ It does not:
 
 The first provisioning entry point is:
 
-- [`scripts/provision_tenant.sh`](/Users/xavierlopez/Dev/pg/scripts/provision_tenant.sh)
+- `scripts/provision_tenant.sh`
 
 It targets any reachable PostgreSQL host and applies the hardened tenant model to one tenant at a time.
 
@@ -134,7 +134,7 @@ After provisioning:
 
 The broader negative-test model remains in:
 
-- [`scripts/test_isolation.sh`](/Users/xavierlopez/Dev/pg/scripts/test_isolation.sh)
+- `scripts/test_isolation.sh`
 
 ## First Consumer
 
