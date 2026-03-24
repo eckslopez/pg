@@ -14,6 +14,7 @@ This repository includes:
 - A hardened tenant isolation model (database-per-tenant, role-per-tenant, dedicated schema, locked-down public schema, safe search_path, and default privilege hardening)
 - A reproducible Docker environment
 - A comprehensive test suite including both happy-path and negative “attack” tests
+- A host-targeted provisioning workflow for external shared PostgreSQL
 - Architectural, security, compliance, and auditing documentation
 - A roadmap toward Terraform implementation and RDS deployment
 
@@ -28,9 +29,11 @@ pg-multitenant/
 │   └── 01_init_tenants.sql
 ├── scripts/
 │   ├── test_isolation.sh
+│   ├── provision_tenant.sh
 │   └── (future) test_isolation_rds.sh
 ├── docs/
 │   ├── ARCHITECTURE.md
+│   ├── PROVISIONING.md
 │   ├── SECURITY.md
 │   ├── THREAT_MODEL.md
 │   ├── COMPLIANCE.md
@@ -57,6 +60,11 @@ Each tenant receives:
 - No ability to create extensions or foreign data wrappers
 
 Admin and tenant behavior is validated through a comprehensive test suite.
+
+For real external-host provisioning, see:
+
+- `docs/PROVISIONING.md`
+- `scripts/provision_tenant.sh`
 
 -----------------------------------------------------------------------
 
@@ -141,14 +149,14 @@ These documents serve as a reference implementation for building secure, complia
 Planned next steps include:
 
 1. Terraform Migration  
-   Convert the database initialization logic (currently in SQL) into Terraform resources using the Terraform **PostgreSQL provider**, including:
+   Convert the host-targeted provisioning logic into Terraform resources using the Terraform **PostgreSQL provider**, including:
    - `postgresql_database`
    - `postgresql_role`
    - `postgresql_schema`
    - `postgresql_grant`
    - `postgresql_default_privileges`
 
-   These resources will allow Terraform to connect directly to a PostgreSQL instance (initially your local Docker instance, later AWS RDS) and create tenant databases, roles, schemas, and hardened privileges in a fully declarative manner.
+   These resources will allow Terraform to connect directly to a PostgreSQL instance (initially the shared VM, later managed PostgreSQL) and create tenant databases, roles, schemas, and hardened privileges in a fully declarative manner.
 
 2. AWS Deployment  
    Introduce AWS infrastructure using Terraform’s `aws` provider:

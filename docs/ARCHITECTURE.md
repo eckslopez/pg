@@ -108,6 +108,12 @@ AWS deployment (future, via Terraform):
   - grants (`postgresql_grant`)
 - The same logical design is applied to RDS using infrastructure-as-code rather than init scripts.
 
+Current platform direction:
+
+- the PostgreSQL host itself is provisioned outside this repo
+- this repo owns tenant-level PostgreSQL provisioning on that host
+- tenant workloads consume only Vault-delivered connection outputs
+
 ## Data Isolation Summary
 
 Data isolation is achieved through:
