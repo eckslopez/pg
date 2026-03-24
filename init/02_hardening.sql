@@ -101,7 +101,7 @@ GRANT USAGE ON SCHEMA app TO tenant_a_app;
 -----------------------------------------------------------------------
 
 ALTER ROLE tenant_a_app SET search_path = app;
-ALTER ROLE tenant_a_app CONNECTION LIMIT 2;
+ALTER ROLE tenant_a_app CONNECTION LIMIT 10;
 ALTER ROLE tenant_a_app SET lock_timeout = '2s';
 ALTER ROLE tenant_a_app SET idle_in_transaction_session_timeout = '10s';
 
@@ -147,7 +147,7 @@ REVOKE GRANT OPTION FOR USAGE, SELECT ON ALL SEQUENCES IN SCHEMA app FROM tenant
 GRANT USAGE ON SCHEMA app TO tenant_b_app;
 
 ALTER ROLE tenant_b_app SET search_path = app;
-ALTER ROLE tenant_b_app CONNECTION LIMIT 2;
+ALTER ROLE tenant_b_app CONNECTION LIMIT 10;
 ALTER ROLE tenant_b_app SET lock_timeout = '2s';
 ALTER ROLE tenant_b_app SET idle_in_transaction_session_timeout = '10s';
 
@@ -193,7 +193,7 @@ REVOKE GRANT OPTION FOR USAGE, SELECT ON ALL SEQUENCES IN SCHEMA app FROM tenant
 GRANT USAGE ON SCHEMA app TO tenant_c_app;
 
 ALTER ROLE tenant_c_app SET search_path = app;
-ALTER ROLE tenant_c_app CONNECTION LIMIT 2;
+ALTER ROLE tenant_c_app CONNECTION LIMIT 10;
 ALTER ROLE tenant_c_app SET lock_timeout = '2s';
 ALTER ROLE tenant_c_app SET idle_in_transaction_session_timeout = '10s';
 

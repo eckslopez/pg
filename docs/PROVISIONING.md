@@ -60,7 +60,7 @@ Optional inputs:
 - statement timeout, default `3s`
 - lock timeout, default `2s`
 - idle-in-transaction timeout, default `10s`
-- connection limit, default `2`
+- connection limit, default `10`
 
 ## Example
 
@@ -90,6 +90,10 @@ Against the shared host:
    - `connection_limit`
    - `lock_timeout`
    - `idle_in_transaction_session_timeout`
+
+The default connection limit is intentionally conservative, but it must still fit
+real process models. The original default of `2` was too low for `panchito`'s
+multi-worker runtime, so the v1 default is now `10`.
 7. Locks down `public` in the tenant database
 8. Ensures the tenant `app` schema exists and is owned by `platform_owner`
 9. Applies default privileges and runtime grants for tables and sequences

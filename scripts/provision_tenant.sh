@@ -21,7 +21,7 @@ Optional:
   --statement-timeout <duration>               Default: 3s
   --lock-timeout <duration>                    Default: 2s
   --idle-in-tx-timeout <duration>              Default: 10s
-  --connection-limit <number>                  Default: 2
+  --connection-limit <number>                  Default: 10
   --sslmode <mode>                             Default: disable
 
 This script provisions one tenant database and login role on a shared PostgreSQL host.
@@ -42,7 +42,7 @@ APP_SCHEMA="app"
 STATEMENT_TIMEOUT="3s"
 LOCK_TIMEOUT="2s"
 IDLE_IN_TX_TIMEOUT="10s"
-CONNECTION_LIMIT="2"
+CONNECTION_LIMIT="10"
 SSLMODE="disable"
 
 while [[ $# -gt 0 ]]; do
