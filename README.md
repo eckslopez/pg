@@ -63,8 +63,8 @@ Admin and tenant behavior is validated through a comprehensive test suite.
 
 For real external-host provisioning, see:
 
-- [`docs/PROVISIONING.md`](/Users/xavierlopez/Dev/pg/docs/PROVISIONING.md)
-- [`scripts/provision_tenant.sh`](/Users/xavierlopez/Dev/pg/scripts/provision_tenant.sh)
+- `docs/PROVISIONING.md`
+- `scripts/provision_tenant.sh`
 
 -----------------------------------------------------------------------
 
