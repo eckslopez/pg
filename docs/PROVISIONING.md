@@ -94,9 +94,14 @@ Against the shared host:
 The default connection limit is intentionally conservative, but it must still fit
 real process models. The original default of `2` was too low for `panchito`'s
 multi-worker runtime, so the v1 default is now `10`.
+
+Some workloads need a materially higher limit. During Keycloak recovery, the
+`keycloak_app` role exhausted the default limit and had to be raised manually to
+`50`. Treat JVM identity workloads like Keycloak as an explicit override case and
+set `--connection-limit 50` when provisioning them.
 7. Locks down `public` in the tenant database
 8. Ensures the tenant `app` schema exists and is owned by `platform_owner`
-9. Applies default privileges and runtime grants for tables and sequences
+9. Applies default privileges and runtime grants for schema, tables, and sequences
 
 ## Tenant Secret Output Contract
 
